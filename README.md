@@ -58,8 +58,12 @@ the same scoring as the free test at ai-ulu.com/checkup/.
 ## Structure
 
 ```
-scripts/lead-agent.mjs   lead agent: scan, audit, draft, approval, sending
+scripts/lead-agent.mjs   lead agent CLI: scan, audit, draft, approval, sending
 scripts/geo-audit.mjs    GEO audit (AI-search case)
+lib/agent-core.mjs       pure core (CSV, leads, routes, drafts, MIME) + Rust binding
+lib/store.mjs            JSON store (.lead-agent/store.json) and lead merging
+lib/engine.mjs           scraper kit HTTP client
+lib/mailer.mjs           Resend / SMTP sending
 lib/checkup.mjs          shared scoring checks
 lib/config.mjs           brand / sender configuration
 test/                    unit tests (node --test)
