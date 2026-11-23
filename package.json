@@ -1,0 +1,15 @@
+{
+  "name": "lead-agent",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "ai-ulu lead agent: Google Maps leads via google-maps-scraper-kit, site audits, approval-gated outreach email.",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "lead": "node scripts/lead-agent.mjs",
+    "geo:audit": "node scripts/geo-audit.mjs",
+    "test": "node --test test/*.test.js"
+  }
+}
