@@ -1,4 +1,10 @@
 #!/usr/bin/env node
+// >>> rust-anything: lead-agent-rs is on. `rust-anything disable ../rust/lead-agent-rs` removes this block.
+// @ts-ignore
+const __rustAnything_lead_agent_rs = ((p) => p && p.env.RUST_ANYTHING_MODE !== 'old' && p.env.RUST_ANYTHING_UNIT_LEAD_AGENT !== 'original' && (() => { try { const m = p.getBuiltinModule('node:module'); const at = p.getBuiltinModule('node:path').join(import.meta.dirname, "../rust/lead-agent-rs/index.cjs"); return m.createRequire(at)(at) } catch (e) { if (p.env.RUST_ANYTHING_MODE === 'new') throw e } })())(globalThis.process)
+// @ts-ignore
+if (__rustAnything_lead_agent_rs) { parseCsvRows = __rustAnything_lead_agent_rs.parseCsvRows; normalizeHost = __rustAnything_lead_agent_rs.normalizeHost; extractEmails = __rustAnything_lead_agent_rs.extractEmails; leadFromRow = __rustAnything_lead_agent_rs.leadFromRow; importRows = __rustAnything_lead_agent_rs.importRows; scanConversion = __rustAnything_lead_agent_rs.scanConversion; lossPoints = __rustAnything_lead_agent_rs.lossPoints; chooseRoute = __rustAnything_lead_agent_rs.chooseRoute; topIssues = __rustAnything_lead_agent_rs.topIssues; buildDraft = __rustAnything_lead_agent_rs.buildDraft; buildMime = __rustAnything_lead_agent_rs.buildMime }
+// <<< rust-anything: lead-agent-rs
 // Lead agent: müşteri bulur, web sitesini teknik olarak inceler, e-posta taslağı
 // hazırlar; onay verilenleri gönderir. Kaynak: google-maps-scraper-kit çıktıları.
 //
