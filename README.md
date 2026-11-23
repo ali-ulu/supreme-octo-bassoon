@@ -31,6 +31,15 @@ approve.** It has no dependencies (stdlib, Node 22+).
 5. **Sending** — `npm run lead -- send --all` (only approved ones). If you want to preview first:
    `send --all --dry-run` prints the MIME. If sending fails for drafts without an email
    address, it reports it clearly — use the phone number in the `show` output.
+6. **Follow-up** — every sent draft gets `followUpAt` (+2 days, `LEAD_AGENT_FOLLOWUP_DAYS`).
+   `npm run lead -- follow` creates a short reminder draft for sent-and-not-answered leads;
+   it stays approval-gated. When `inbox` marks a lead as answered, pending follow-ups cancel.
+7. **Scheduling** — `send --all --schedule "yarın 09:00"` queues drafts (`scheduled`);
+   `send --due [--rate 20]` sends what is due with an hourly cap (`LEAD_AGENT_RATE`).
+8. **WhatsApp channel** — `draft --channel whatsapp` builds the short (≤300 char) message
+   plus a `wa.me` deep link; those drafts are delivered as copyable text (approval still required).
+9. **Report** — `npm run lead -- report` one-glance summary: leads analyzed, drafts by
+   status/route, average score, sent/scheduled/replied.
 
 ```bash
 npm run lead -- list
@@ -38,6 +47,10 @@ npm run lead -- show fe65a2c1
 npm run lead -- approve fe65a2c1
 npm run lead -- send --all --dry-run
 npm run lead -- send --all
+npm run lead -- follow
+npm run lead -- send --all --schedule "yarın 09:00"
+npm run lead -- send --due
+npm run lead -- report
 ```
 
 ## Sending configuration (environment variables)
@@ -49,6 +62,9 @@ npm run lead -- send --all
 | `LEAD_AGENT_FROM`    | Sender line; default: `Ali Ulu <aliulu@ai-ulu.com>`                     |
 | `SCRAPER_BASE_URL` / `SCRAPER_PORT` `SCRAPER_API_KEY` | Kit engine address (default `http://localhost:8080`) |
 | `LEAD_AGENT_DIR`     | Data directory (default `.lead-agent`)                                  |
+| `LEAD_AGENT_FOLLOWUP_DAYS` | Follow-up reminder delay (default 2)                                  |
+| `LEAD_AGENT_RATE`    | Scheduled sends per hour (default 20)                                  |
+| `IMAP_HOST` `IMAP_USER` `IMAP_PASS` [`IMAP_PORT`/`IMAP_FOLDER`] | Reply detection (`inbox`)         |
 
 ## Independent audit
 
@@ -63,7 +79,8 @@ scripts/geo-audit.mjs    GEO audit (AI-search case)
 lib/agent-core.mjs       pure core (CSV, leads, routes, drafts, MIME) + Rust binding
 lib/store.mjs            JSON store (.lead-agent/store.json) and lead merging
 lib/engine.mjs           scraper kit HTTP client
-lib/mailer.mjs           Resend / SMTP sending
+lib/mailer.mjs           Resend / SMTP / WhatsApp delivering
+lib/imap.mjs             minimal IMAP client for reply detection
 lib/checkup.mjs          shared scoring checks
 lib/config.mjs           brand / sender configuration
 test/                    unit tests (node --test)

@@ -2,21 +2,25 @@
 // Lead agent CLI: scan → audit → draft → approval → send. Orchestration only;
 // the pure core, store, engine client and mailer live in lib/.
 
-import { readFile } from "node:fs/promises";
+import { readFile, readdir, stat } from "node:fs/promises";
 import { pathToFileURL } from "node:url";
 
 import { VERSION, parseCsvRows, normalizeHost, extractEmails, leadFromRow, importRows, scanConversion, lossPoints, chooseRoute, topIssues, buildDraft, b64, rfc2047, buildMime } from "../lib/agent-core.mjs";
 import { STORE, loadStore, saveStore, draftId, addLeads } from "../lib/store.mjs";
 import { engineBase, createJob, waitForJob, engineCsv } from "../lib/engine.mjs";
 import { sendDraft } from "../lib/mailer.mjs";
+import { imapSearchReplies } from "../lib/imap.mjs";
 import { site } from "../lib/config.mjs";
 import { audit, fetchUrl } from "./geo-audit.mjs";
 
 export { parseCsvRows, normalizeHost, extractEmails, leadFromRow, importRows, scanConversion, lossPoints, chooseRoute, topIssues, buildDraft, b64, rfc2047, buildMime };
+import { buildFollowUp, buildWhatsapp, waLeadLink, reportOf, parseSchedule, isDue, matchReplies } from "../lib/agent-core.mjs";
 
 const UA = `Mozilla/5.0 (compatible; ai-ulu-lead-agent/${VERSION}; +https://ai-ulu.com/)`;
 const AUDIT_TIMEOUT = 12_000;
 const AUDIT_MAX_PAGES = 3;
+
+const FOLLOWUP_DAYS = () => Number(process.env.LEAD_AGENT_FOLLOWUP_DAYS) || 2;
 
 const USAGE = `lead-agent v${VERSION} — lead bulma, site analizi ve onaylı e-posta gönderimi
 
@@ -24,18 +28,29 @@ Komutlar:
   fetch   --query "diş kliniği İstanbul" [--depth 2] [--max-time 600] [--engine http://localhost:8080]
           [--keywords-file FILE] [--lang tr] [--country tr] [--lat <lat> --lon <lon>]
           Kit motorunda tarama başlatır (veya bekleyen işi indirir) ve CSV'yi içe aktarır.
-  import  --csv FILE    Kit'in CSV çıktısını lead listesine ekler.
+  import  --csv FILE [--watch [SANIYE]]   CSV'yi içe aktarır; --watch dosya/dizin izler
+                                         (dizin: tüm *.csv), Ctrl+C ile durun.
   analyze [--limit N]   Her lead için site denetimi (site yoksa teklif rotası işaretlenir).
-  draft    [--id ID]    Analizden e-posta taslakları üretir.
-  list    [--status draft|approved|sent|rejected|skipped]  Özet tablo.
+  draft   [--id ID] [--channel whatsapp]  Analizden taslaklar üretir; WhatsApp için
+                                        kısa mesaj + wa.me derin linki (telefon şart).
+  list    [--status draft|approved|scheduled|sent|rejected|skipped]  Özet tablo.
   show    <id>          Taslağı tam metin olarak gösterir.
   approve <id>          Taslağı gönderime onaylar.  reject <id>  |  skip <id>
+  follow  [id ...]      Gönderilmiş ve takipsiz taslaklara hatırlatma taslağı üretir;
+                        yalnız takip günü geçenleri alır (belirli lead ID'si ile zorlayabilirsiniz).
   send    [id ... | --all] [--dry-run]  Yalnızca approved taslakları gönderir.
+          [+ --schedule "yarın 09:00" | "23:30" | ISO]  Gönderimi kuyruğa koyar.
+          [+ --due] [--rate N]          Zamanı gelen kuyruğu gönderir (saatte N, varsayılan 20).
+                                        LEAD_AGENT_RATE / LEAD_AGENT_FOLLOWUP_DAYS çevre değişkenleri geçerli.
+  report                Özet rapor (lead/analiz, taslak durumları, rota dağılımı, ortalama skor).
+  inbox                 IMAP kutusunu denetler; lead yanıtını işaretler, beş takip/kuyruk iptali.
 
 Gönderim (env):
   RESEND_API_KEY + RESEND_FROM adı@ai-ulu.com  — Resend HTTP API
   SMTP_HOST SMTP_PORT SMTP_USER SMTP_PASS      — doğrudan SMTP (STARTTLS)
   LEAD_AGENT_FROM "Ad <posta@sunucu>"          (varsayılan: ${site.owner} <${site.email}>)
+
+Yanıt denetimi (env): IMAP_HOST IMAP_USER IMAP_PASS [IMAP_PORT, varsayılan 993] [IMAP_FOLDER, varsayılan INBOX]
 
 Kit motoru: SCRAPER_BASE_URL veya SCRAPER_PORT (varsayılan 8080).
 Veriler: ${STORE} (.gitignore'da). Her mesajı yalnızca kendi onayınızla gönderin;
@@ -132,9 +147,48 @@ async function cmdFetch(args, store) {
 
 async function cmdImport(args, store) {
   if (!args.csv) throw new Error("CSV gerekli: import --csv leads.csv");
+  if (args.watch) return cmdImportWatch(args, store);
   const text = await readFile(args.csv, "utf8");
   const { leads, skipped } = importRows(text);
   return addLeads(store, leads, skipped, args.csv);
+}
+
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+async function csvFiles(pathArg) {
+  let files = [];
+  let isDir = false;
+  try { isDir = (await stat(pathArg)).isDirectory(); } catch { isDir = false; }
+  if (isDir) files = (await readdir(pathArg)).filter((f) => f.toLowerCase().endsWith(".csv")).sort().map((f) => `${pathArg.replace(/\/+$/, "")}/${f}`);
+  else files = [pathArg];
+  const existing = [];
+  for (const f of files) { try { await stat(f); existing.push(f); } catch { console.error(`✗ bulunamadı: ${f}`); } }
+  if (!existing.length) throw new Error(`CSV bulunamadı: ${pathArg}`);
+  return existing;
+}
+
+async function cmdImportWatch(args, store) {
+  const warg = Number(args.watch);
+  const interval = (args.watch !== true && Number.isFinite(warg) && warg > 0 ? warg : 60) * 1000;
+  const files = await csvFiles(args.csv);
+  const seen = new Map();
+  for (let cycle = 0; ; cycle++) {
+    let addedTotal = 0;
+    for (const path of files) {
+      let sig = "";
+      try { const st = await stat(path); sig = `${st.mtimeMs}:${st.size}`; } catch { continue; }
+      if (seen.get(path) === sig) continue;
+      seen.set(path, sig);
+      const text = await readFile(path, "utf8");
+      const { leads, skipped } = importRows(text);
+      if (!leads.length) continue;
+      addLeads(store, leads, skipped, path);
+      addedTotal += leads.length;
+    }
+    if (cycle === 0) console.log(`▶ İzleme açık (${files.map((f) => f.split("/").at(-1)).join(", ")}) — ${interval / 1000} sn'de bir denetlenir; Ctrl+C ile durun.`);
+    if (addedTotal) await saveStore(store);
+    await sleep(interval);
+  }
 }
 
 async function cmdAnalyze(args, store) {
@@ -153,15 +207,19 @@ async function cmdAnalyze(args, store) {
   return store;
 }
 
-function makeDrafts(store) {
+function makeDrafts(store, channel) {
+  const wa = channel === "whatsapp";
   let made = 0, updated = 0;
   for (const [leadId, lead] of Object.entries(store.leads)) {
     if (!lead.analysis) continue;
-    const { route, to, subject, body } = buildDraft(lead, lead.analysis);
-    const existing = Object.values(store.drafts).find((d) => d.leadId === leadId);
+    const content = wa
+      ? { ...buildWhatsapp(lead, lead.analysis), to: lead.phone || "", route: lead.analysis.route || "no-site" }
+      : buildDraft(lead, lead.analysis);
+    const { route, to, subject, body } = content;
+    const existing = Object.values(store.drafts).find((d) => d.leadId === leadId && (d.channel || null) === (wa ? "whatsapp" : null) && d.route === route);
     if (existing) {
       if (existing.status === "draft") {
-        Object.assign(existing, { route, to, subject, body, score: lead.analysis.score ?? null, updatedAt: new Date().toISOString() });
+        Object.assign(existing, { route, to, subject, body, channel: wa ? "whatsapp" : null, score: lead.analysis.score ?? null, updatedAt: new Date().toISOString() });
         updated++;
         console.log(`~ ${existing.id} ${route.padEnd(14)} ${shorten(lead.name, 28)} ${to || lead.phone || "—"}  ${shorten(subject, 56)}`);
       }
@@ -170,6 +228,7 @@ function makeDrafts(store) {
     const id = draftId();
     store.drafts[id] = {
       id, leadId, route, to, subject, body,
+      channel: wa ? "whatsapp" : null,
       score: lead.analysis.score ?? null,
       status: "draft",
       createdAt: new Date().toISOString(),
@@ -184,21 +243,49 @@ function makeDrafts(store) {
 
 async function cmdSend(args, store) {
   const dryRun = Boolean(args.dryRun);
-  const ids = args.all
-    ? Object.values(store.drafts).filter((d) => d.status === "approved").map((d) => d.id)
-    : args._.filter((x) => x !== "send");
-  if (!ids.length) { console.log("Onaylı taslak yok. approve <id> ile onay verin."); return store; }
+  const due = args.due
+    ? Object.values(store.drafts).filter((d) => isDue(d, store.leads)).sort((a, b) => (a.sendAt < b.sendAt ? -1 : 1)).map((d) => d.id)
+    : null;
+  const ids = due !== null
+    ? due
+    : args.all
+      ? Object.values(store.drafts).filter((d) => d.status === "approved").map((d) => d.id)
+      : args._.filter((x) => x !== "send");
+  if (!ids.length) {
+    console.log(due !== null ? "Zamanı gelen kuyruk yok." : args.all || args.due ? "Onaylı/kuyrukta taslak yok." : "Onaylı taslak yok. approve <id> ile onay verin.");
+    return store;
+  }
+  if (args.schedule) {
+    const sendAt = parseSchedule(args.schedule);
+    let scheduled = 0;
+    for (const id of ids) {
+      const d = store.drafts[id];
+      if (!d || d.status !== "approved") { console.error(`✗ ${id}: yalnızca approved taslaklar kuyruğa alınır (şu an ${d?.status || "yok"}).`); continue; }
+      d.status = "scheduled";
+      d.sendAt = sendAt;
+      scheduled++;
+      console.log(`⏰ ${id} → scheduled ${sendAt}`);
+    }
+    console.log(`\n▶ Kuyruğa alınan: ${scheduled}. Zamanı gelince: send --due`);
+    return store;
+  }
+  const rate = Number(args.rate) || Number(process.env.LEAD_AGENT_RATE) || 20;
+  const interval = Math.round(3_600_000 / Math.max(1, rate));
   let sent = 0, failed = 0;
-  for (const id of ids) {
+  for (let i = 0; i < ids.length; i++) {
+    const id = ids[i];
     const d = store.drafts[id];
     if (!d) { console.error(`✗ bulunamadı: ${id}`); failed++; continue; }
-    if (d.status !== "approved" && !dryRun) { console.error(`✗ ${id}: onay bekliyor (şu an ${d.status}); önce approve kullanın.`); failed++; continue; }
+    if (d.status !== "approved" && d.status !== "scheduled" && !dryRun) { console.error(`✗ ${id}: onay bekliyor (şu an ${d.status}); önce approve kullanın.`); failed++; continue; }
+    if (!dryRun && d.status === "scheduled" && !due && !args._.includes(id)) { console.error(`✗ ${id}: kuyrukta (${d.sendAt}); göndermek için send --due kullanın.`); failed++; continue; }
+    if (!dryRun && due && i > 0) { console.log(`… hız limiti: ${Math.round(interval / 1000)} sn bekleniyor (saatte ${rate})`); await sleep(interval); }
     try {
       const ref = await sendDraft(d, { dryRun });
       if (!dryRun) {
         d.status = "sent";
         d.sentAt = new Date().toISOString();
         d.sentRef = String(ref);
+        if (d.channel !== "whatsapp") d.followUpAt = new Date(Date.now() + FOLLOWUP_DAYS() * 86_400_000).toISOString();
       }
       sent++;
       console.log(`✓ ${id} → ${d.to || "—"}${dryRun ? " (dry-run)" : ""}`);
@@ -209,6 +296,64 @@ async function cmdSend(args, store) {
     }
   }
   console.log(`\n▶ Gönderilen: ${sent}, hatalı: ${failed}${dryRun ? " (dry-run)" : ""}.`);
+  return store;
+}
+
+async function cmdFollow(args, store) {
+  const targets = args._.filter((x) => x !== "follow");
+  const now = new Date().toISOString();
+  const candidates = Object.values(store.drafts).filter((d) =>
+    d.status === "sent" && d.channel !== "whatsapp" && !d.followedAt &&
+    (targets.includes(d.id) ? Boolean(d.sentAt) : (d.followUpAt && d.followUpAt <= now)));
+  if (!candidates.length) { console.log(`Takip için uygun gönderim yok (takip günü: ${FOLLOWUP_DAYS()}).`); return store; }
+  let made = 0;
+  for (const origin of candidates) {
+    const lead = store.leads[origin.leadId] || {};
+    if (lead.replied) { console.log(`~ ${origin.id}: ${lead.name} yanıtladı; takip gerekmiyor.`); origin.followedAt = now; continue; }
+    if (Object.values(store.drafts).some((d) => d.originDraftId === origin.id && d.status !== "cancelled")) { origin.followedAt = now; continue; }
+    const f = buildFollowUp(lead, origin);
+    const id = draftId();
+    store.drafts[id] = {
+      id, leadId: origin.leadId, route: "follow-up", originDraftId: origin.id,
+      to: f.to, subject: f.subject, body: f.body, channel: null,
+      score: origin.score ?? null, status: "draft",
+      createdAt: new Date().toISOString(), approvedAt: null, sentAt: null, error: null,
+    };
+    origin.followedAt = now;
+    made++;
+    console.log(`+ ${id} follow-up     ${lead.name || "—"} ${f.to || lead.phone || "—"}  ${f.subject.slice(0, 56)}`);
+  }
+  console.log(`\n▶ Hatırlatma taslağı: ${made}. Göndereceğiniz: approve <id>; send`);
+  return store;
+}
+
+function cmdReport(store) {
+  const r = reportOf(store);
+  console.log(`Leadler: ${r.leads.total} (analizli: ${r.leads.analyzed}, sitesiz: ${r.leads.noSite}, yanıtlayan: ${r.replied})`);
+  console.log(`Taslaklar: ${r.drafts.total} (gönderilen: ${r.sent}, kuyrukta: ${r.scheduled})`);
+  console.log(`Durum: ${Object.entries(r.drafts.byStatus).map(([k, v]) => `${k}=${v}`).join(", ") || "—"}`);
+  console.log(`Rota: ${Object.entries(r.drafts.byRoute).map(([k, v]) => `${k}=${v}`).join(", ") || "—"}`);
+  console.log(`Ortalama skor: ${r.avgScore ?? "—"}${r.avgScore !== null ? "/100" : ""}`);
+  return store;
+}
+
+async function cmdInbox(store) {
+  const sentAts = Object.values(store.drafts).filter((d) => d.sentAt).map((d) => d.sentAt);
+  const since = new Date(Math.min(Date.now(), ...sentAts.map((s) => Date.parse(s)).map((n) => Number.isFinite(n) ? n : Date.now())) - 2 * 86_400_000);
+  const messages = await imapSearchReplies({
+    host: process.env.IMAP_HOST,
+    port: Number(process.env.IMAP_PORT) || 993,
+    user: process.env.IMAP_USER,
+    pass: process.env.IMAP_PASS,
+    folder: process.env.IMAP_FOLDER || "INBOX",
+    since,
+  });
+  console.log(`▶ Gelen kutusu: ${messages.length} mesaj denetlendi (${since.toISOString().slice(0, 10)} sonrası).`);
+  const matched = matchReplies(store, messages);
+  if (!matched) { console.log("Yanıt yok."); return store; }
+  const replied = Object.values(store.leads).filter((l) => l.replied);
+  for (const lead of replied) console.log(`✓ ${lead.name} — son yanıt ${lead.lastReplyAt}`);
+  console.log(`\n▶ Yanıtlayan lead: ${replied.length}; ilgili kuyruk/takvit iptalları istemci tarafında işlendi.`);
   return store;
 }
 
@@ -227,7 +372,7 @@ async function main() {
       case "fetch": out = await cmdFetch(args, store); break;
       case "import": out = await cmdImport(args, store); break;
       case "analyze": out = await cmdAnalyze(args, store); break;
-      case "draft": out = makeDrafts(store); break;
+      case "draft": out = makeDrafts(store, args.channel); break;
       case "list": printList(store, args.status); break;
       case "show": printDraft(store, String(args._[0] || "")); break;
       case "approve":
@@ -243,10 +388,13 @@ async function main() {
         break;
       }
       case "send": out = await cmdSend(args, store); break;
+      case "follow": out = await cmdFollow(args, store); break;
+      case "report": cmdReport(store); break;
+      case "inbox": out = await cmdInbox(store); break;
       case "status": printList(store, null); break;
       default: console.log(USAGE); process.exit(1);
     }
-    if (command !== "show" && command !== "help") await saveStore(out);
+    if (command !== "show" && command !== "help" && command !== "report") await saveStore(out);
   } catch (error) {
     console.error(`✗ ${error.message}`);
     process.exit(1);

@@ -16,6 +16,15 @@ import {
   rfc2047,
   buildMime,
 } from "../scripts/lead-agent.mjs";
+import {
+  buildFollowUp,
+  buildWhatsapp,
+  reportOf,
+  parseSchedule,
+  isDue,
+  matchReplies,
+} from "../lib/agent-core.mjs";
+
 
 const KIT_HEADER = [
   "input_id", "link", "title", "category", "address", "open_hours", "popular_times", "website",
@@ -217,4 +226,127 @@ test("buildMime: UTF-8 konu, base64 gövde, satır uzunlukları", () => {
 test("buildMime: alıcı ve gönderen zorunlu", () => {
   assert.throws(() => buildMime({ from: "", to: "a@b.com", subject: "s", body: "b" }), /Gönderen/);
   assert.throws(() => buildMime({ from: "a@b.com", to: "", subject: "s", body: "b" }), /Alıcı/);
+});
+
+// ── feature: follow-up / whatsapp / report / schedule / inbox ────────────────
+
+test("buildFollowUp: konu Re: öneki alır (çift olmaz), metin isim+link+imza içerir", () => {
+  const lead = { name: "Ay Işığı Pastanesi", emails: ["a@ayisigi.com"], phone: "+90 212 555 01 01", website: "", address: "Kadıköy, İstanbul" };
+  const sent = { id: "abc12345", to: "a@ayisigi.com", subject: "Ay Işığı Pastanesi için müşteri getiren bir web sitesi (Kadıköy)", route: "no-site" };
+  const f = buildFollowUp(lead, sent);
+  assert.equal(f.route, "follow-up");
+  assert.equal(f.to, "a@ayisigi.com");
+  assert.match(f.subject, /^Re: /);
+  assert.equal(f.subject, `Re: ${sent.subject}`);
+  const again = buildFollowUp(lead, { ...sent, subject: f.subject });
+  assert.equal(again.subject, f.subject);
+  assert.match(f.body, /Ay Işığı Pastanesi/);
+  assert.match(f.body, /wa\.me\/905079581642/);
+  assert.match(f.body, /aliulu@ai-ulu\.com/);
+  assert.ok(f.body.length < 900);
+});
+
+test("buildWhatsapp: 300 karakter altı, wa.me derin linki, 0'lı telefon 90'a çevrilir", () => {
+  const lead = { name: "Kadıköy Kuaför", phone: "0216 444 02 02", emails: [], website: "", address: "Fikirtepe, İstanbul", reviewCount: 54, reviewRating: 4.2 };
+  const m = buildWhatsapp(lead, null);
+  assert.equal(m.route, "no-site");
+  assert.match(m.subject, /^WhatsApp/);
+  assert.ok(m.body.length <= 300, `uzunluk ${m.body.length}`);
+  assert.match(m.body, /Kadıköy Kuaför/);
+  assert.ok(m.link.startsWith("https://wa.me/902164440202?text="));
+  const long = buildWhatsapp({ ...lead, name: "Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun Uzun" }, null);
+  assert.ok(long.body.length <= 300);
+});
+
+test("reportOf: sayaçlar, rota dağılımı, ortalama skor", () => {
+  const store = {
+    leads: {
+      l1: { name: "A", emails: ["a@a.com"], phone: "", website: "s1.com", analysis: { route: "fix", score: 40, grade: "E", recommendations: [] } },
+      l2: { name: "B", emails: ["b@b.com"], phone: "", website: "", analysis: { route: "no-site", analyzedAt: "x" } },
+      l3: { name: "C", emails: [], phone: "1", website: "s3.com", analysis: null },
+    },
+    drafts: {
+      d1: { id: "d1", leadId: "l1", route: "fix", status: "sent", score: 40, sentAt: "t", sentRef: "r" },
+      d2: { id: "d2", leadId: "l2", route: "no-site", status: "approved", score: null, sentAt: null },
+      d3: { id: "d3", leadId: "l3", route: "fix", status: "draft", score: null, sentAt: null },
+      d4: { id: "d4", leadId: "l1", route: "follow-up", status: "draft", score: null, sentAt: null },
+    },
+  };
+  const r = reportOf(store);
+  assert.equal(r.leads.total, 3);
+  assert.equal(r.leads.analyzed, 2);
+  assert.equal(r.leads.noSite, 1);
+  assert.equal(r.drafts.total, 4);
+  assert.equal(r.drafts.byStatus.sent, 1);
+  assert.equal(r.drafts.byStatus.approved, 1);
+  assert.equal(r.drafts.byRoute["follow-up"], 1);
+  assert.equal(r.avgScore, 40);
+  assert.equal(r.sent, 1);
+});
+
+test("parseSchedule: 'yarın 09:00', 'HH:MM' ve ISO; geçersiz -> hata", () => {
+  const base = new Date("2026-01-20T10:00:00");
+  const soon = parseSchedule("yarın 09:00", base);
+  assert.equal(soon, new Date("2026-01-21T09:00:00").toISOString());
+  const today = parseSchedule("23:30", base);
+  assert.equal(today, new Date("2026-01-20T23:30:00").toISOString());
+  const passed = parseSchedule("05:00", base);
+  assert.equal(passed, new Date("2026-01-21T05:00:00").toISOString());
+  const iso = parseSchedule("2026-02-01T08:15:00Z", base);
+  assert.equal(iso, "2026-02-01T08:15:00.000Z");
+  assert.throws(() => parseSchedule("bazı zaman", base), /schedule/);
+});
+
+test("isDue + matchReplies: takvit/zamanlama ve iptal kuralları", () => {
+  const now = "2026-01-20T10:00:00.000Z";
+  const lead = { name: "A", emails: ["a@a.com"], phone: "" };
+  const draft = (over = {}) => ({ id: "d1", leadId: "l1", to: "a@a.com", status: "scheduled", sendAt: "2026-01-20T09:59:00.000Z", ...over });
+  assert.equal(isDue(draft({ leadId: "l1" }), { l1: lead }, now), true);
+  assert.equal(isDue(draft({ leadId: "l1" }).status === "scheduled" ? draft({ status: "sent" }) : draft(), { l1: lead }, now), false);
+  assert.equal(isDue(draft({ leadId: "l1" }), { l1: { ...lead, replied: true } }, now), false);
+  assert.equal(isDue(draft({ leadId: "l1" }), { lX: lead }, now), false);
+  const store = { leads: { l1: { name: "A", emails: ["a@a.com"], phone: "" } }, drafts: { d1: draft({ followUpAt: "2026-01-20T12:00:00.000Z" }) } };
+  const replies = [
+    { from: "b@b.com", subject: "Hello", date: "2026-01-20T10:30:00.000Z" },
+    { from: "a@a.com", subject: "Re: teklif (ücretsiz kontrol)", date: "2026-01-20T11:00:00.000Z" },
+    { from: "a@a.com", subject: "Re: teklif (ücretsiz kontrol)", date: "2026-01-19T11:00:00.000Z" },
+  ];
+  const matched = matchReplies(store, replies);
+  assert.equal(matched, true);
+  assert.equal(store.leads.l1.replied, true);
+  assert.equal(store.leads.l1.lastReplyAt, "2026-01-20T11:00:00.000Z");
+});
+
+test("imapSearchReplies: minimal IMAP oturumu (loopback sunucu)", async () => {
+  const net = await import("node:net");
+  const { imapSearchReplies } = await import("../lib/imap.mjs");
+  const server = net.createServer((sock) => {
+    let buf = "";
+    sock.write("* OK IMAP ready\r\n");
+    sock.on("data", (d) => {
+      buf += d.toString("utf8");
+      let i;
+      while ((i = buf.indexOf("\r\n")) >= 0) {
+        const line = buf.slice(0, i);
+        buf = buf.slice(i + 2);
+        const t = line.split(" ")[0];
+        if (/SEARCH/.test(line)) sock.write("* SEARCH 3 7\r\n" + t + " OK done\r\n");
+        else if (/FETCH/.test(line)) sock.write("* 1 FETCH (BODY[HEADER.FIELDS (FROM SUBJECT DATE)] {58}\r\nFrom: Ali Test <carlici@ornek.com>\r\nSubject: Re: teklif\r\nDate: 20 Jan 2026 11:00:00 GMT\r\n\r\n)\r\n" + t + " OK done\r\n");
+        else sock.write(t + " OK\r\n");
+      }
+    });
+  });
+  await new Promise((r) => server.listen(0, "127.0.0.1", r));
+  process.env.IMAP_SECURE = "0";
+  try {
+    const port = server.address().port;
+    const messages = await imapSearchReplies({ host: "127.0.0.1", port, user: "u", pass: "p", folder: "INBOX", since: "2026-01-01T00:00:00Z" });
+    assert.equal(messages.length, 1);
+    assert.equal(messages[0].from, "Ali Test <carlici@ornek.com>");
+    assert.equal(messages[0].subject, "Re: teklif");
+    await assert.rejects(() => imapSearchReplies({ host: "", port: 993, user: "x", pass: "", since: new Date() }), /IMAP yapılandırılmadı/);
+  } finally {
+    delete process.env.IMAP_SECURE;
+    server.close();
+  }
 });
