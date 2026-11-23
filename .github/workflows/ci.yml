@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  rust:
+    name: Rust (fmt, clippy, test)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: rust/lead-agent-rs
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: rust/lead-agent-rs
+      - run: cargo fmt --check
+      - run: cargo clippy -- -D warnings
+      - run: cargo test
+
+  node:
+    name: Node (npm test, Rust + JS paths)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: rust/lead-agent-rs
+      - name: Build native addon (lead_agent_rs.node)
+        run: |
+          cd rust/lead-agent-rs
+          cargo build
+          cp target/debug/liblead_agent_rs.so lead_agent_rs.node
+      - name: Tests with Rust path active
+        run: npm test
+      - name: Tests with original JS path
+        run: npm test
+        env:
+          RUST_ANYTHING_UNIT_LEAD_AGENT: original
