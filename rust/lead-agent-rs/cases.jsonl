@@ -660,6 +660,668 @@
 {"fn":"buildMime","args":[{"2":4,"10":3,"zebra":1,"apple":2,"é":5,"Apple":6}],"error":"Gönderen adresi yok (LEAD_AGENT_FROM / site.email)."}
 {"fn":"buildMime","args":[{"n":9007199254740992,"f":1e+21,"t":0.1,"neg":-7}],"error":"Gönderen adresi yok (LEAD_AGENT_FROM / site.email)."}
 {"fn":"buildMime","args":[[3,1,2]],"error":"Gönderen adresi yok (LEAD_AGENT_FROM / site.email)."}
+{"fn":"parseCsvRows","args":[{"a":"b"}],"ok":[]}
+{"fn":"parseCsvRows","args":[0],"ok":[]}
+{"fn":"parseCsvRows","args":[{"a":{"b":"c"}}],"ok":[]}
+{"fn":"parseCsvRows","args":[["a",1]],"ok":[["a1"]]}
+{"fn":"parseCsvRows","args":[true],"ok":[]}
+{"fn":"parseCsvRows","args":[[]],"ok":[]}
+{"fn":"parseCsvRows","args":["x"],"ok":[["x"]]}
+{"fn":"parseCsvRows","args":[null],"error":"Cannot read properties of null (reading 'length')"}
+{"fn":"parseCsvRows","args":[{}],"ok":[]}
+{"fn":"parseCsvRows","args":[{"2":4,"10":3,"zebra":1,"apple":2,"é":5,"Apple":6}],"ok":[]}
+{"fn":"parseCsvRows","args":[{"n":9007199254740992,"f":1e+21,"t":0.1,"neg":-7}],"ok":[]}
+{"fn":"parseCsvRows","args":[[3,1,2]],"ok":[["312"]]}
+{"fn":"normalizeHost","args":[{}],"ok":""}
+{"fn":"normalizeHost","args":[0],"ok":""}
+{"fn":"normalizeHost","args":[{"a":{"b":"c"}}],"ok":""}
+{"fn":"normalizeHost","args":[{"a":"b"}],"ok":""}
+{"fn":"normalizeHost","args":[["a",1]],"ok":"a,1"}
+{"fn":"normalizeHost","args":[true],"ok":"true"}
+{"fn":"normalizeHost","args":[null],"ok":""}
+{"fn":"normalizeHost","args":[[]],"ok":""}
+{"fn":"normalizeHost","args":["x"],"ok":"x"}
+{"fn":"normalizeHost","args":[{"2":4,"10":3,"zebra":1,"apple":2,"é":5,"Apple":6}],"ok":""}
+{"fn":"normalizeHost","args":[{"n":9007199254740992,"f":1e+21,"t":0.1,"neg":-7}],"ok":""}
+{"fn":"normalizeHost","args":[[3,1,2]],"ok":"3,1,2"}
+{"fn":"extractEmails","args":[[]],"ok":[]}
+{"fn":"extractEmails","args":[null],"ok":[]}
+{"fn":"extractEmails","args":[true],"ok":[]}
+{"fn":"extractEmails","args":[{"a":"b"}],"ok":[]}
+{"fn":"extractEmails","args":[["a",1]],"ok":[]}
+{"fn":"extractEmails","args":[0],"ok":[]}
+{"fn":"extractEmails","args":[{}],"ok":[]}
+{"fn":"extractEmails","args":[{"a":{"b":"c"}}],"ok":[]}
+{"fn":"extractEmails","args":["x"],"ok":[]}
+{"fn":"extractEmails","args":[{"2":4,"10":3,"zebra":1,"apple":2,"é":5,"Apple":6}],"ok":[]}
+{"fn":"extractEmails","args":[{"n":9007199254740992,"f":1e+21,"t":0.1,"neg":-7}],"ok":[]}
+{"fn":"extractEmails","args":[[3,1,2]],"ok":[]}
+{"fn":"leadFromRow","args":[{"a":"b"},0],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[{},[]],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[0,{}],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[{},{"a":"b"}],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[{"a":{"b":"c"}},["a",1]],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[0,0],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[true,"x"],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[null,{"a":{"b":"c"}}],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[["a",1],null],"error":"Cannot read properties of null (reading 'get')"}
+{"fn":"leadFromRow","args":[null,true],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[0,{"a":{"b":"c"}}],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[{"a":{"b":"c"}},0],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[[],{}],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[{"a":{"b":"c"}},"x"],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[null,null],"error":"Cannot read properties of null (reading 'get')"}
+{"fn":"leadFromRow","args":["x",[]],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[{"a":"b"},{"a":"b"}],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[["a",1],[]],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[null,["a",1]],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[{},{}],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[[],"x"],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[null,{}],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":["x",["a",1]],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[["a",1],{"a":"b"}],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[true,{"a":"b"}],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[true,null],"error":"Cannot read properties of null (reading 'get')"}
+{"fn":"leadFromRow","args":["x",{"a":{"b":"c"}}],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":["x",true],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[{"a":{"b":"c"}},true],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":["x","x"],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[{"a":"b"},["a",1]],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":["x",0],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[true,["a",1]],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":["x",{}],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[{"a":{"b":"c"}},null],"error":"Cannot read properties of null (reading 'get')"}
+{"fn":"leadFromRow","args":[["a",1],{}],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[[],null],"error":"Cannot read properties of null (reading 'get')"}
+{"fn":"leadFromRow","args":[["a",1],{"a":{"b":"c"}}],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[{"a":{"b":"c"}},{"a":"b"}],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":["x",null],"error":"Cannot read properties of null (reading 'get')"}
+{"fn":"leadFromRow","args":[[],["a",1]],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[{},true],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[0,[]],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[true,true],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":["x",{"a":"b"}],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[true,{"a":{"b":"c"}}],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[{"a":{"b":"c"}},{}],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[["a",1],true],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[{},null],"error":"Cannot read properties of null (reading 'get')"}
+{"fn":"leadFromRow","args":[{"a":"b"},{}],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[null,{"a":"b"}],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[{},{"a":{"b":"c"}}],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[0,["a",1]],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[[],true],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[0,"x"],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[{"a":"b"},null],"error":"Cannot read properties of null (reading 'get')"}
+{"fn":"leadFromRow","args":[[],[]],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[null,"x"],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[0,null],"error":"Cannot read properties of null (reading 'get')"}
+{"fn":"leadFromRow","args":[{},["a",1]],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[true,0],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[0,true],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[{"a":"b"},true],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[["a",1],"x"],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[0,{"a":"b"}],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[{},"x"],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[true,{}],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[null,0],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[{"a":"b"},[]],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[[],{"a":"b"}],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[[],0],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[{},0],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[[],{"a":{"b":"c"}}],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[["a",1],["a",1]],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[{"a":"b"},{"a":{"b":"c"}}],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[["a",1],0],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[{"a":"b"},"x"],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[true,[]],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[null,[]],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[{"a":{"b":"c"}},{"a":{"b":"c"}}],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[{"a":{"b":"c"}},[]],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":["x","X"],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":["X","x"],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[{"2":4,"10":3,"zebra":1,"apple":2,"é":5,"Apple":6},0],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[{"n":9007199254740992,"f":1e+21,"t":0.1,"neg":-7},0],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[[3,1,2],0],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[{"a":"b"},{"2":4,"10":3,"zebra":1,"apple":2,"é":5,"Apple":6}],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[{"a":"b"},{"n":9007199254740992,"f":1e+21,"t":0.1,"neg":-7}],"error":"header.get is not a function"}
+{"fn":"leadFromRow","args":[{"a":"b"},[3,1,2]],"error":"header.get is not a function"}
+{"fn":"importRows","args":[{}],"ok":{"leads":[],"skipped":0}}
+{"fn":"importRows","args":[null],"error":"Cannot read properties of null (reading 'length')"}
+{"fn":"importRows","args":[true],"ok":{"leads":[],"skipped":0}}
+{"fn":"importRows","args":[0],"ok":{"leads":[],"skipped":0}}
+{"fn":"importRows","args":[["a",1]],"ok":{"leads":[],"skipped":0}}
+{"fn":"importRows","args":[{"a":"b"}],"ok":{"leads":[],"skipped":0}}
+{"fn":"importRows","args":["x"],"ok":{"leads":[],"skipped":0}}
+{"fn":"importRows","args":[{"a":{"b":"c"}}],"ok":{"leads":[],"skipped":0}}
+{"fn":"importRows","args":[[]],"ok":{"leads":[],"skipped":0}}
+{"fn":"importRows","args":[{"2":4,"10":3,"zebra":1,"apple":2,"é":5,"Apple":6}],"ok":{"leads":[],"skipped":0}}
+{"fn":"importRows","args":[{"n":9007199254740992,"f":1e+21,"t":0.1,"neg":-7}],"ok":{"leads":[],"skipped":0}}
+{"fn":"importRows","args":[[3,1,2]],"ok":{"leads":[],"skipped":0}}
+{"fn":"scanConversion","args":[{"a":{"b":"c"}},null],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[[],["a",1]],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[0,null],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[[],0],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[[],true],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[{"a":{"b":"c"}},true],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[{"a":"b"},null],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[true,{"a":"b"}],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[0,["a",1]],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":["x",[]],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[[],{"a":{"b":"c"}}],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":["x",["a",1]],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[["a",1],[]],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[["a",1],null],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[{"a":{"b":"c"}},{"a":"b"}],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[null,true],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[["a",1],"x"],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[{},["a",1]],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[["a",1],{"a":"b"}],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":["x",{"a":{"b":"c"}}],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[true,[]],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[[],{}],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[{"a":"b"},0],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[{"a":{"b":"c"}},[]],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[null,{"a":{"b":"c"}}],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[{},{}],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[{"a":{"b":"c"}},"x"],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[true,{"a":{"b":"c"}}],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[true,0],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[0,0],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[true,["a",1]],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[null,0],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[{"a":{"b":"c"}},0],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[0,[]],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[["a",1],["a",1]],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[{"a":"b"},true],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":["x",{}],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[true,{}],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[null,["a",1]],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[["a",1],0],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":["x",null],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[{"a":"b"},[]],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[0,true],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[[],null],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[[],{"a":"b"}],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[["a",1],true],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[{"a":{"b":"c"}},["a",1]],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[{},0],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[{},null],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[["a",1],{}],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[{},true],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[{},{"a":"b"}],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[{"a":"b"},"x"],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[0,{}],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[{"a":"b"},{}],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":["x","X"],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[null,[]],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[[],"x"],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[0,{"a":"b"}],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[["a",1],{"a":{"b":"c"}}],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[{"a":"b"},{"a":"b"}],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[{},[]],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[{},"x"],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[0,{"a":{"b":"c"}}],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[null,"x"],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[{},{"a":{"b":"c"}}],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":["x","x"],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[null,{}],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[true,"x"],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[[],[]],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":["x",0],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[0,"x"],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[true,true],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[{"a":"b"},{"a":{"b":"c"}}],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[{"a":{"b":"c"}},{}],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":["x",true],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[null,{"a":"b"}],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":["x",{"a":"b"}],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[{"a":"b"},["a",1]],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[{"a":{"b":"c"}},{"a":{"b":"c"}}],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[true,null],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[null,null],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":["X","x"],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[{"2":4,"10":3,"zebra":1,"apple":2,"é":5,"Apple":6},null],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[{"n":9007199254740992,"f":1e+21,"t":0.1,"neg":-7},null],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[[3,1,2],null],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[{"a":{"b":"c"}},{"2":4,"10":3,"zebra":1,"apple":2,"é":5,"Apple":6}],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[{"a":{"b":"c"}},{"n":9007199254740992,"f":1e+21,"t":0.1,"neg":-7}],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"scanConversion","args":[{"a":{"b":"c"}},[3,1,2]],"ok":{"https":false,"hasWhats":false,"hasTel":false,"hasForm":false,"hasEmail":false,"viewport":false,"lang":""}}
+{"fn":"lossPoints","args":[{}],"ok":[]}
+{"fn":"lossPoints","args":[[]],"ok":[]}
+{"fn":"lossPoints","args":[{"a":"b"}],"ok":[]}
+{"fn":"lossPoints","args":[["a",1]],"ok":[]}
+{"fn":"lossPoints","args":[true],"ok":[]}
+{"fn":"lossPoints","args":[{"a":{"b":"c"}}],"ok":[]}
+{"fn":"lossPoints","args":[null],"error":"Cannot read properties of null (reading 'conversion')"}
+{"fn":"lossPoints","args":["x"],"ok":[]}
+{"fn":"lossPoints","args":[0],"ok":[]}
+{"fn":"lossPoints","args":[{"2":4,"10":3,"zebra":1,"apple":2,"é":5,"Apple":6}],"ok":[]}
+{"fn":"lossPoints","args":[{"n":9007199254740992,"f":1e+21,"t":0.1,"neg":-7}],"ok":[]}
+{"fn":"lossPoints","args":[[3,1,2]],"ok":[]}
+{"fn":"chooseRoute","args":[true,"x"],"ok":"no-site"}
+{"fn":"chooseRoute","args":[[],"x"],"ok":"no-site"}
+{"fn":"chooseRoute","args":[true,{"a":"b"}],"ok":"no-site"}
+{"fn":"chooseRoute","args":[0,{"a":{"b":"c"}}],"ok":"no-site"}
+{"fn":"chooseRoute","args":[null,{}],"error":"Cannot read properties of null (reading 'website')"}
+{"fn":"chooseRoute","args":[{"a":{"b":"c"}},true],"ok":"no-site"}
+{"fn":"chooseRoute","args":[["a",1],{"a":{"b":"c"}}],"ok":"no-site"}
+{"fn":"chooseRoute","args":[["a",1],"x"],"ok":"no-site"}
+{"fn":"chooseRoute","args":["x",true],"ok":"no-site"}
+{"fn":"chooseRoute","args":[["a",1],{}],"ok":"no-site"}
+{"fn":"chooseRoute","args":["x",{}],"ok":"no-site"}
+{"fn":"chooseRoute","args":[{"a":"b"},["a",1]],"ok":"no-site"}
+{"fn":"chooseRoute","args":[null,true],"error":"Cannot read properties of null (reading 'website')"}
+{"fn":"chooseRoute","args":[{},{"a":"b"}],"ok":"no-site"}
+{"fn":"chooseRoute","args":[true,0],"ok":"no-site"}
+{"fn":"chooseRoute","args":[true,{}],"ok":"no-site"}
+{"fn":"chooseRoute","args":[true,true],"ok":"no-site"}
+{"fn":"chooseRoute","args":[0,["a",1]],"ok":"no-site"}
+{"fn":"chooseRoute","args":["x",0],"ok":"no-site"}
+{"fn":"chooseRoute","args":[true,[]],"ok":"no-site"}
+{"fn":"chooseRoute","args":[true,{"a":{"b":"c"}}],"ok":"no-site"}
+{"fn":"chooseRoute","args":["x","x"],"ok":"no-site"}
+{"fn":"chooseRoute","args":[[],{}],"ok":"no-site"}
+{"fn":"chooseRoute","args":[{"a":{"b":"c"}},{"a":"b"}],"ok":"no-site"}
+{"fn":"chooseRoute","args":[{},0],"ok":"no-site"}
+{"fn":"chooseRoute","args":[{"a":"b"},{}],"ok":"no-site"}
+{"fn":"chooseRoute","args":[{},{}],"ok":"no-site"}
+{"fn":"chooseRoute","args":[{},{"a":{"b":"c"}}],"ok":"no-site"}
+{"fn":"chooseRoute","args":["x",{"a":{"b":"c"}}],"ok":"no-site"}
+{"fn":"chooseRoute","args":[[],{"a":"b"}],"ok":"no-site"}
+{"fn":"chooseRoute","args":[null,null],"error":"Cannot read properties of null (reading 'website')"}
+{"fn":"chooseRoute","args":[[],true],"ok":"no-site"}
+{"fn":"chooseRoute","args":[{"a":"b"},{"a":"b"}],"ok":"no-site"}
+{"fn":"chooseRoute","args":[0,null],"ok":"no-site"}
+{"fn":"chooseRoute","args":[["a",1],[]],"ok":"no-site"}
+{"fn":"chooseRoute","args":[{"a":"b"},{"a":{"b":"c"}}],"ok":"no-site"}
+{"fn":"chooseRoute","args":[{"a":"b"},true],"ok":"no-site"}
+{"fn":"chooseRoute","args":[[],null],"ok":"no-site"}
+{"fn":"chooseRoute","args":["x",null],"ok":"no-site"}
+{"fn":"chooseRoute","args":[0,[]],"ok":"no-site"}
+{"fn":"chooseRoute","args":[{"a":{"b":"c"}},"x"],"ok":"no-site"}
+{"fn":"chooseRoute","args":[{},["a",1]],"ok":"no-site"}
+{"fn":"chooseRoute","args":[{},[]],"ok":"no-site"}
+{"fn":"chooseRoute","args":[[],["a",1]],"ok":"no-site"}
+{"fn":"chooseRoute","args":[0,true],"ok":"no-site"}
+{"fn":"chooseRoute","args":[null,0],"error":"Cannot read properties of null (reading 'website')"}
+{"fn":"chooseRoute","args":[null,[]],"error":"Cannot read properties of null (reading 'website')"}
+{"fn":"chooseRoute","args":[0,{}],"ok":"no-site"}
+{"fn":"chooseRoute","args":["x",{"a":"b"}],"ok":"no-site"}
+{"fn":"chooseRoute","args":[{"a":"b"},null],"ok":"no-site"}
+{"fn":"chooseRoute","args":[{"a":"b"},[]],"ok":"no-site"}
+{"fn":"chooseRoute","args":["x",["a",1]],"ok":"no-site"}
+{"fn":"chooseRoute","args":[{"a":{"b":"c"}},[]],"ok":"no-site"}
+{"fn":"chooseRoute","args":[[],{"a":{"b":"c"}}],"ok":"no-site"}
+{"fn":"chooseRoute","args":[{"a":{"b":"c"}},null],"ok":"no-site"}
+{"fn":"chooseRoute","args":[{"a":{"b":"c"}},{}],"ok":"no-site"}
+{"fn":"chooseRoute","args":["x",[]],"ok":"no-site"}
+{"fn":"chooseRoute","args":[true,["a",1]],"ok":"no-site"}
+{"fn":"chooseRoute","args":[0,"x"],"ok":"no-site"}
+{"fn":"chooseRoute","args":[{"a":{"b":"c"}},["a",1]],"ok":"no-site"}
+{"fn":"chooseRoute","args":[{"a":{"b":"c"}},0],"ok":"no-site"}
+{"fn":"chooseRoute","args":[{"a":"b"},0],"ok":"no-site"}
+{"fn":"chooseRoute","args":[null,{"a":{"b":"c"}}],"error":"Cannot read properties of null (reading 'website')"}
+{"fn":"chooseRoute","args":[true,null],"ok":"no-site"}
+{"fn":"chooseRoute","args":[[],[]],"ok":"no-site"}
+{"fn":"chooseRoute","args":[null,{"a":"b"}],"error":"Cannot read properties of null (reading 'website')"}
+{"fn":"chooseRoute","args":[["a",1],["a",1]],"ok":"no-site"}
+{"fn":"chooseRoute","args":[{"a":{"b":"c"}},{"a":{"b":"c"}}],"ok":"no-site"}
+{"fn":"chooseRoute","args":[["a",1],null],"ok":"no-site"}
+{"fn":"chooseRoute","args":[[],0],"ok":"no-site"}
+{"fn":"chooseRoute","args":[null,"x"],"error":"Cannot read properties of null (reading 'website')"}
+{"fn":"chooseRoute","args":[0,{"a":"b"}],"ok":"no-site"}
+{"fn":"chooseRoute","args":[["a",1],0],"ok":"no-site"}
+{"fn":"chooseRoute","args":[{"a":"b"},"x"],"ok":"no-site"}
+{"fn":"chooseRoute","args":[{},"x"],"ok":"no-site"}
+{"fn":"chooseRoute","args":[0,0],"ok":"no-site"}
+{"fn":"chooseRoute","args":[{},true],"ok":"no-site"}
+{"fn":"chooseRoute","args":[["a",1],true],"ok":"no-site"}
+{"fn":"chooseRoute","args":[{},null],"ok":"no-site"}
+{"fn":"chooseRoute","args":[null,["a",1]],"error":"Cannot read properties of null (reading 'website')"}
+{"fn":"chooseRoute","args":[["a",1],{"a":"b"}],"ok":"no-site"}
+{"fn":"chooseRoute","args":["x","X"],"ok":"no-site"}
+{"fn":"chooseRoute","args":["X","x"],"ok":"no-site"}
+{"fn":"chooseRoute","args":[{"2":4,"10":3,"zebra":1,"apple":2,"é":5,"Apple":6},"x"],"ok":"no-site"}
+{"fn":"chooseRoute","args":[{"n":9007199254740992,"f":1e+21,"t":0.1,"neg":-7},"x"],"ok":"no-site"}
+{"fn":"chooseRoute","args":[[3,1,2],"x"],"ok":"no-site"}
+{"fn":"chooseRoute","args":[true,{"2":4,"10":3,"zebra":1,"apple":2,"é":5,"Apple":6}],"ok":"no-site"}
+{"fn":"chooseRoute","args":[true,{"n":9007199254740992,"f":1e+21,"t":0.1,"neg":-7}],"ok":"no-site"}
+{"fn":"chooseRoute","args":[true,[3,1,2]],"ok":"no-site"}
+{"fn":"topIssues","args":[{},{}],"ok":[]}
+{"fn":"topIssues","args":[["a",1],{"a":{"b":"c"}}],"ok":[]}
+{"fn":"topIssues","args":[{"a":{"b":"c"}},{"a":{"b":"c"}}],"ok":[]}
+{"fn":"topIssues","args":[null,{"a":{"b":"c"}}],"error":"Cannot read properties of null (reading 'conversion')"}
+{"fn":"topIssues","args":[{"a":"b"},0],"ok":[]}
+{"fn":"topIssues","args":[{"a":{"b":"c"}},true],"ok":[]}
+{"fn":"topIssues","args":[{"a":{"b":"c"}},["a",1]],"ok":[]}
+{"fn":"topIssues","args":[{"a":"b"},[]],"ok":[]}
+{"fn":"topIssues","args":[null,null],"error":"Cannot read properties of null (reading 'conversion')"}
+{"fn":"topIssues","args":[true,0],"ok":[]}
+{"fn":"topIssues","args":[null,{"a":"b"}],"error":"Cannot read properties of null (reading 'conversion')"}
+{"fn":"topIssues","args":[{},{"a":"b"}],"ok":[]}
+{"fn":"topIssues","args":[true,["a",1]],"ok":[]}
+{"fn":"topIssues","args":[[],["a",1]],"ok":[]}
+{"fn":"topIssues","args":[{},true],"ok":[]}
+{"fn":"topIssues","args":["x",{"a":"b"}],"ok":[]}
+{"fn":"topIssues","args":[{},"x"],"ok":[]}
+{"fn":"topIssues","args":[0,{}],"ok":[]}
+{"fn":"topIssues","args":["x","x"],"ok":[]}
+{"fn":"topIssues","args":[{"a":{"b":"c"}},0],"ok":[]}
+{"fn":"topIssues","args":[["a",1],"x"],"ok":[]}
+{"fn":"topIssues","args":[{},["a",1]],"ok":[]}
+{"fn":"topIssues","args":[{"a":"b"},{"a":"b"}],"ok":[]}
+{"fn":"topIssues","args":[{"a":"b"},null],"ok":[]}
+{"fn":"topIssues","args":[0,null],"ok":[]}
+{"fn":"topIssues","args":[["a",1],0],"ok":[]}
+{"fn":"topIssues","args":[{"a":{"b":"c"}},"x"],"ok":[]}
+{"fn":"topIssues","args":[0,["a",1]],"ok":[]}
+{"fn":"topIssues","args":[true,{"a":{"b":"c"}}],"ok":[]}
+{"fn":"topIssues","args":[0,"x"],"ok":[]}
+{"fn":"topIssues","args":[0,true],"ok":[]}
+{"fn":"topIssues","args":[0,[]],"ok":[]}
+{"fn":"topIssues","args":[[],{"a":"b"}],"ok":[]}
+{"fn":"topIssues","args":[true,true],"ok":[]}
+{"fn":"topIssues","args":[true,null],"ok":[]}
+{"fn":"topIssues","args":["x",{}],"ok":[]}
+{"fn":"topIssues","args":[0,{"a":{"b":"c"}}],"ok":[]}
+{"fn":"topIssues","args":[{},0],"ok":[]}
+{"fn":"topIssues","args":[true,[]],"ok":[]}
+{"fn":"topIssues","args":[null,{}],"error":"Cannot read properties of null (reading 'conversion')"}
+{"fn":"topIssues","args":[["a",1],["a",1]],"ok":[]}
+{"fn":"topIssues","args":[[],true],"ok":[]}
+{"fn":"topIssues","args":[{"a":"b"},{}],"ok":[]}
+{"fn":"topIssues","args":[["a",1],null],"ok":[]}
+{"fn":"topIssues","args":[true,{}],"ok":[]}
+{"fn":"topIssues","args":[[],0],"ok":[]}
+{"fn":"topIssues","args":[{"a":"b"},true],"ok":[]}
+{"fn":"topIssues","args":[null,true],"error":"Cannot read properties of null (reading 'conversion')"}
+{"fn":"topIssues","args":[{},[]],"ok":[]}
+{"fn":"topIssues","args":["x",0],"ok":[]}
+{"fn":"topIssues","args":[null,"x"],"error":"Cannot read properties of null (reading 'conversion')"}
+{"fn":"topIssues","args":["x",true],"ok":[]}
+{"fn":"topIssues","args":[null,[]],"error":"Cannot read properties of null (reading 'conversion')"}
+{"fn":"topIssues","args":[["a",1],{}],"ok":[]}
+{"fn":"topIssues","args":[[],null],"ok":[]}
+{"fn":"topIssues","args":[[],{"a":{"b":"c"}}],"ok":[]}
+{"fn":"topIssues","args":[0,0],"ok":[]}
+{"fn":"topIssues","args":[["a",1],{"a":"b"}],"ok":[]}
+{"fn":"topIssues","args":[true,{"a":"b"}],"ok":[]}
+{"fn":"topIssues","args":[{"a":{"b":"c"}},{}],"ok":[]}
+{"fn":"topIssues","args":[{"a":{"b":"c"}},{"a":"b"}],"ok":[]}
+{"fn":"topIssues","args":["x",["a",1]],"ok":[]}
+{"fn":"topIssues","args":[{"a":"b"},{"a":{"b":"c"}}],"ok":[]}
+{"fn":"topIssues","args":["x",null],"ok":[]}
+{"fn":"topIssues","args":["x",{"a":{"b":"c"}}],"ok":[]}
+{"fn":"topIssues","args":[{"a":"b"},"x"],"ok":[]}
+{"fn":"topIssues","args":[true,"x"],"ok":[]}
+{"fn":"topIssues","args":[{"a":{"b":"c"}},null],"ok":[]}
+{"fn":"topIssues","args":[null,["a",1]],"error":"Cannot read properties of null (reading 'conversion')"}
+{"fn":"topIssues","args":[["a",1],true],"ok":[]}
+{"fn":"topIssues","args":[null,0],"error":"Cannot read properties of null (reading 'conversion')"}
+{"fn":"topIssues","args":["x",[]],"ok":[]}
+{"fn":"topIssues","args":[{},null],"ok":[]}
+{"fn":"topIssues","args":[[],"x"],"ok":[]}
+{"fn":"topIssues","args":[0,{"a":"b"}],"ok":[]}
+{"fn":"topIssues","args":[["a",1],[]],"ok":[]}
+{"fn":"topIssues","args":[{"a":"b"},["a",1]],"ok":[]}
+{"fn":"topIssues","args":[[],[]],"ok":[]}
+{"fn":"topIssues","args":[{},{"a":{"b":"c"}}],"ok":[]}
+{"fn":"topIssues","args":[{"a":{"b":"c"}},[]],"ok":[]}
+{"fn":"topIssues","args":[[],{}],"ok":[]}
+{"fn":"topIssues","args":["X","x"],"ok":[]}
+{"fn":"topIssues","args":[{"2":4,"10":3,"zebra":1,"apple":2,"é":5,"Apple":6},{}],"ok":[]}
+{"fn":"topIssues","args":[{"n":9007199254740992,"f":1e+21,"t":0.1,"neg":-7},{}],"ok":[]}
+{"fn":"topIssues","args":[[3,1,2],{}],"ok":[]}
+{"fn":"topIssues","args":[{},{"2":4,"10":3,"zebra":1,"apple":2,"é":5,"Apple":6}],"ok":[]}
+{"fn":"topIssues","args":[{},{"n":9007199254740992,"f":1e+21,"t":0.1,"neg":-7}],"ok":[]}
+{"fn":"topIssues","args":[{},[3,1,2]],"ok":[]}
+{"fn":"buildDraft","args":[true,[],["a",1]],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[{},null,null],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[["a",1],{"a":{"b":"c"}},{}],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[{"a":{"b":"c"}},["a",1],["a",1]],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[["a",1],{"a":{"b":"c"}},{"a":"b"}],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[true,{"a":{"b":"c"}},true],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[[],{},"x"],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":["x",null,true],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[true,{"a":"b"},null],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[[],0,[]],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[["a",1],true,null],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[null,["a",1],"x"],"error":"Cannot read properties of null (reading 'address')"}
+{"fn":"buildDraft","args":["x",[],null],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[["a",1],[],true],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[{},[],["a",1]],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[{},0,true],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":["x",{"a":{"b":"c"}},[]],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[null,{"a":"b"},0],"error":"Cannot read properties of null (reading 'website')"}
+{"fn":"buildDraft","args":[true,true,["a",1]],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[0,[],{}],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[{},{"a":"b"},null],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[0,{},"x"],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[{},[],[]],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[{"a":"b"},{"a":"b"},{}],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[0,["a",1],true],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[true,null,{"a":{"b":"c"}}],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":["x",["a",1],"x"],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[true,{"a":"b"},{"a":{"b":"c"}}],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[{"a":{"b":"c"}},null,0],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[null,["a",1],{}],"error":"Cannot read properties of null (reading 'address')"}
+{"fn":"buildDraft","args":[{},0,0],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":["x",{},null],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[{"a":{"b":"c"}},{},"x"],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[[],{},{"a":{"b":"c"}}],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":["x",{"a":{"b":"c"}},0],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[0,{},true],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":["x",{},[]],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":["x",["a",1],["a",1]],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[null,"x",["a",1]],"error":"Cannot read properties of null (reading 'address')"}
+{"fn":"buildDraft","args":[null,null,[]],"error":"Cannot read properties of null (reading 'address')"}
+{"fn":"buildDraft","args":[[],[],{}],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[["a",1],{"a":{"b":"c"}},[]],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[{"a":{"b":"c"}},["a",1],"x"],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":["x",[],{}],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[{},[],"x"],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[null,null,["a",1]],"error":"Cannot read properties of null (reading 'address')"}
+{"fn":"buildDraft","args":[{},"x",0],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[0,0,"x"],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[true,"x",0],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[0,true,null],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[null,true,[]],"error":"Cannot read properties of null (reading 'address')"}
+{"fn":"buildDraft","args":[{},0,{}],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[0,true,{}],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[{"a":{"b":"c"}},["a",1],{}],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[["a",1],null,null],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[[],{"a":{"b":"c"}},[]],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":["x","x",{}],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":["x",null,{}],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[[],{},{}],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[[],0,"x"],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":["x",0,"x"],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[{"a":{"b":"c"}},0,{"a":{"b":"c"}}],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[true,["a",1],0],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[{"a":{"b":"c"}},null,{}],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[{},["a",1],"x"],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[true,"x",{}],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[{},0,{"a":{"b":"c"}}],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[{"a":{"b":"c"}},true,["a",1]],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[["a",1],true,[]],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[{},"x",{"a":"b"}],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[0,{},{"a":{"b":"c"}}],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[{},null,"x"],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[true,"x",["a",1]],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[["a",1],{},"x"],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":["x",{},0],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[true,[],{"a":"b"}],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[{"a":{"b":"c"}},{"a":"b"},["a",1]],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[{},null,0],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":["x",0,0],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[true,[],null],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[["a",1],null,{"a":{"b":"c"}}],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[0,{"a":"b"},{"a":"b"}],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[{},null,{"a":"b"}],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":["x",null,{"a":"b"}],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":["x",null,0],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[["a",1],{},{"a":{"b":"c"}}],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[["a",1],"x",{"a":"b"}],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[[],true,{"a":{"b":"c"}}],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[{"a":"b"},"x","x"],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[["a",1],true,{"a":{"b":"c"}}],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[true,true,{}],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":["x",null,null],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[null,{"a":{"b":"c"}},{"a":{"b":"c"}}],"error":"Cannot read properties of null (reading 'address')"}
+{"fn":"buildDraft","args":[{"a":"b"},null,"x"],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[{"a":"b"},0,{"a":"b"}],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":["x",["a",1],true],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":["x",{},{"a":"b"}],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[{"a":{"b":"c"}},true,true],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":["x",{"a":{"b":"c"}},["a",1]],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[null,{},{"a":{"b":"c"}}],"error":"Cannot read properties of null (reading 'address')"}
+{"fn":"buildDraft","args":[true,true,{"a":{"b":"c"}}],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[{"a":{"b":"c"}},{"a":{"b":"c"}},["a",1]],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[[],{"a":"b"},[]],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[0,null,{"a":{"b":"c"}}],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[{"a":"b"},true,true],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[0,{},["a",1]],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":["x",true,null],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[[],["a",1],{}],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[null,null,0],"error":"Cannot read properties of null (reading 'website')"}
+{"fn":"buildDraft","args":[{"a":"b"},null,{}],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[null,[],null],"error":"Cannot read properties of null (reading 'website')"}
+{"fn":"buildDraft","args":[{"a":{"b":"c"}},{"a":"b"},{"a":{"b":"c"}}],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[{"a":{"b":"c"}},"x",["a",1]],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[{},[],{}],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[{"a":"b"},[],0],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":["x",{"a":"b"},[]],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[true,0,{"a":"b"}],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[0,{},[]],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[true,null,{"a":"b"}],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[0,null,{}],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[0,["a",1],"x"],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[true,{"a":{"b":"c"}},"x"],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[{},"x",true],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[0,true,0],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[{},["a",1],{"a":{"b":"c"}}],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[{},["a",1],0],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[{},[],0],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[{"a":"b"},0,"x"],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[{},{"a":"b"},0],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[null,true,["a",1]],"error":"Cannot read properties of null (reading 'address')"}
+{"fn":"buildDraft","args":[{},{"a":{"b":"c"}},0],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[[],{"a":{"b":"c"}},"x"],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[{"a":"b"},true,[]],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[null,[],{}],"error":"Cannot read properties of null (reading 'address')"}
+{"fn":"buildDraft","args":["x",{"a":{"b":"c"}},"x"],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[null,{"a":{"b":"c"}},["a",1]],"error":"Cannot read properties of null (reading 'address')"}
+{"fn":"buildDraft","args":[[],{"a":"b"},true],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[null,{"a":"b"},null],"error":"Cannot read properties of null (reading 'website')"}
+{"fn":"buildDraft","args":[["a",1],["a",1],{}],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[{"a":"b"},0,{"a":{"b":"c"}}],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[{"a":{"b":"c"}},{},true],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[{},null,["a",1]],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[null,{},{}],"error":"Cannot read properties of null (reading 'address')"}
+{"fn":"buildDraft","args":[true,true,0],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[[],null,null],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[[],{"a":{"b":"c"}},{"a":{"b":"c"}}],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":["x",0,[]],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[{"a":{"b":"c"}},null,null],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[{},{},true],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[["a",1],null,"x"],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[["a",1],"x",true],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":["x",[],{"a":{"b":"c"}}],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":["x",{"a":"b"},{"a":"b"}],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[{"a":{"b":"c"}},{"a":{"b":"c"}},{"a":"b"}],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[{"a":"b"},{"a":"b"},[]],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[true,0,["a",1]],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[["a",1],["a",1],{"a":"b"}],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[{"a":"b"},0,0],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":["x",{"a":"b"},null],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[["a",1],true,{}],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[{},{"a":{"b":"c"}},"x"],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[["a",1],[],null],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[{"a":"b"},null,["a",1]],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[null,"x",true],"error":"Cannot read properties of null (reading 'address')"}
+{"fn":"buildDraft","args":[["a",1],["a",1],true],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[{"a":{"b":"c"}},null,["a",1]],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[{"a":"b"},"x",["a",1]],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[[],{"a":{"b":"c"}},0],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[["a",1],0,null],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[0,0,0],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[{"a":{"b":"c"}},"x",[]],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":["x","x",true],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[{"a":"b"},true,"x"],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[{"a":"b"},{"a":{"b":"c"}},["a",1]],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[{},"x",["a",1]],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[true,{},[]],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[0,{"a":{"b":"c"}},true],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[{},0,[]],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[true,{},0],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[{"a":"b"},"x",0],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[{},0,"x"],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[0,0,{}],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[true,["a",1],["a",1]],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[["a",1],0,true],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[null,{"a":{"b":"c"}},0],"error":"Cannot read properties of null (reading 'website')"}
+{"fn":"buildDraft","args":["x",{"a":{"b":"c"}},{"a":{"b":"c"}}],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[0,0,[]],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[0,{"a":"b"},{}],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":["x",true,[]],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[["a",1],null,{"a":"b"}],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[["a",1],{},true],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[null,[],{"a":"b"}],"error":"Cannot read properties of null (reading 'address')"}
+{"fn":"buildDraft","args":[[],0,{}],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[0,{"a":{"b":"c"}},{}],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[{"a":"b"},["a",1],{"a":"b"}],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[{},{"a":"b"},{}],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[{},{"a":{"b":"c"}},{"a":"b"}],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[true,0,{"a":{"b":"c"}}],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[{"a":{"b":"c"}},[],0],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[["a",1],{"a":{"b":"c"}},["a",1]],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[{"2":4,"10":3,"zebra":1,"apple":2,"é":5,"Apple":6},[],["a",1]],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[{"n":9007199254740992,"f":1e+21,"t":0.1,"neg":-7},[],["a",1]],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[[3,1,2],[],["a",1]],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[true,{"2":4,"10":3,"zebra":1,"apple":2,"é":5,"Apple":6},["a",1]],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[true,{"n":9007199254740992,"f":1e+21,"t":0.1,"neg":-7},["a",1]],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[true,[3,1,2],["a",1]],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[true,{},["a",1]],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[true,[],{"2":4,"10":3,"zebra":1,"apple":2,"é":5,"Apple":6}],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[true,[],{"n":9007199254740992,"f":1e+21,"t":0.1,"neg":-7}],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[true,[],[3,1,2]],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"buildDraft","args":[true,[],{}],"error":"Cannot read properties of undefined (reading '0')"}
+{"fn":"b64","args":["x"],"ok":"eA=="}
+{"fn":"b64","args":[{"a":{"b":"c"}}],"error":"The first argument must be of type string or an instance of Buffer, ArrayBuffer, or Array or an Array-like Object. Received an instance of Object"}
+{"fn":"b64","args":[["a",1]],"ok":"AAE="}
+{"fn":"b64","args":[{}],"error":"The first argument must be of type string or an instance of Buffer, ArrayBuffer, or Array or an Array-like Object. Received an instance of Object"}
+{"fn":"b64","args":[0],"error":"The first argument must be of type string or an instance of Buffer, ArrayBuffer, or Array or an Array-like Object. Received type number (0)"}
+{"fn":"b64","args":[null],"error":"The first argument must be of type string or an instance of Buffer, ArrayBuffer, or Array or an Array-like Object. Received null"}
+{"fn":"b64","args":[true],"error":"The first argument must be of type string or an instance of Buffer, ArrayBuffer, or Array or an Array-like Object. Received type boolean (true)"}
+{"fn":"b64","args":[{"a":"b"}],"error":"The first argument must be of type string or an instance of Buffer, ArrayBuffer, or Array or an Array-like Object. Received an instance of Object"}
+{"fn":"b64","args":[[]],"ok":""}
+{"fn":"b64","args":[{"2":4,"10":3,"zebra":1,"apple":2,"é":5,"Apple":6}],"error":"The first argument must be of type string or an instance of Buffer, ArrayBuffer, or Array or an Array-like Object. Received an instance of Object"}
+{"fn":"b64","args":[{"n":9007199254740992,"f":1e+21,"t":0.1,"neg":-7}],"error":"The first argument must be of type string or an instance of Buffer, ArrayBuffer, or Array or an Array-like Object. Received an instance of Object"}
+{"fn":"b64","args":[[3,1,2]],"ok":"AwEC"}
+{"fn":"rfc2047","args":[null],"error":"The first argument must be of type string or an instance of Buffer, ArrayBuffer, or Array or an Array-like Object. Received null"}
+{"fn":"rfc2047","args":[["a",1]],"ok":"=?UTF-8?B?AAE=?="}
+{"fn":"rfc2047","args":[{}],"error":"The first argument must be of type string or an instance of Buffer, ArrayBuffer, or Array or an Array-like Object. Received an instance of Object"}
+{"fn":"rfc2047","args":[{"a":"b"}],"error":"The first argument must be of type string or an instance of Buffer, ArrayBuffer, or Array or an Array-like Object. Received an instance of Object"}
+{"fn":"rfc2047","args":[[]],"ok":"=?UTF-8?B??="}
+{"fn":"rfc2047","args":[0],"error":"The first argument must be of type string or an instance of Buffer, ArrayBuffer, or Array or an Array-like Object. Received type number (0)"}
+{"fn":"rfc2047","args":[true],"error":"The first argument must be of type string or an instance of Buffer, ArrayBuffer, or Array or an Array-like Object. Received type boolean (true)"}
+{"fn":"rfc2047","args":["x"],"ok":"=?UTF-8?B?eA==?="}
+{"fn":"rfc2047","args":[{"a":{"b":"c"}}],"error":"The first argument must be of type string or an instance of Buffer, ArrayBuffer, or Array or an Array-like Object. Received an instance of Object"}
+{"fn":"rfc2047","args":[{"2":4,"10":3,"zebra":1,"apple":2,"é":5,"Apple":6}],"error":"The first argument must be of type string or an instance of Buffer, ArrayBuffer, or Array or an Array-like Object. Received an instance of Object"}
+{"fn":"rfc2047","args":[{"n":9007199254740992,"f":1e+21,"t":0.1,"neg":-7}],"error":"The first argument must be of type string or an instance of Buffer, ArrayBuffer, or Array or an Array-like Object. Received an instance of Object"}
+{"fn":"rfc2047","args":[[3,1,2]],"ok":"=?UTF-8?B?AwEC?="}
+{"fn":"buildMime","args":[{}],"error":"Gönderen adresi yok (LEAD_AGENT_FROM / site.email)."}
+{"fn":"buildMime","args":[0],"error":"Gönderen adresi yok (LEAD_AGENT_FROM / site.email)."}
+{"fn":"buildMime","args":[[]],"error":"Gönderen adresi yok (LEAD_AGENT_FROM / site.email)."}
+{"fn":"buildMime","args":["x"],"error":"Gönderen adresi yok (LEAD_AGENT_FROM / site.email)."}
+{"fn":"buildMime","args":[["a",1]],"error":"Gönderen adresi yok (LEAD_AGENT_FROM / site.email)."}
+{"fn":"buildMime","args":[{"a":{"b":"c"}}],"error":"Gönderen adresi yok (LEAD_AGENT_FROM / site.email)."}
+{"fn":"buildMime","args":[true],"error":"Gönderen adresi yok (LEAD_AGENT_FROM / site.email)."}
+{"fn":"buildMime","args":[null],"error":"Cannot destructure property 'from' of 'object null' as it is null."}
+{"fn":"buildMime","args":[{"a":"b"}],"error":"Gönderen adresi yok (LEAD_AGENT_FROM / site.email)."}
+{"fn":"buildMime","args":[{"2":4,"10":3,"zebra":1,"apple":2,"é":5,"Apple":6}],"error":"Gönderen adresi yok (LEAD_AGENT_FROM / site.email)."}
+{"fn":"buildMime","args":[{"n":9007199254740992,"f":1e+21,"t":0.1,"neg":-7}],"error":"Gönderen adresi yok (LEAD_AGENT_FROM / site.email)."}
+{"fn":"buildMime","args":[[3,1,2]],"error":"Gönderen adresi yok (LEAD_AGENT_FROM / site.email)."}
 {"fn":"parseCsvRows","args":["a,b\n\"5.000 ₺'den\",\"x, y\"\n\"say \"\"hi\"\"\",2\n"],"ok":[["a","b"],["5.000 ₺'den","x, y"],["say \"hi\"","2"]]}
 {"fn":"normalizeHost","args":["https://www.KlinikDis.com/randevu/"],"ok":"klinikdis.com"}
 {"fn":"normalizeHost","args":["klinikdis.com"],"ok":"klinikdis.com"}
